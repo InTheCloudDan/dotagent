@@ -5,6 +5,8 @@ echo "============="
 echo ""
 echo "1. Creating sample .agent/ directory with rules..."
 mkdir -p .agent
+# Remove deprecated single-file config if present to avoid export aborting
+rm -f .agentconfig
 echo '---
 id: coding-standards
 alwaysApply: true
