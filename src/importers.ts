@@ -98,6 +98,16 @@ export async function importAll(repoPath: string): Promise<ImportResults> {
     }
   }
   
+  // Check for best_practices.md (Qodo)
+  const qodoMd = join(repoPath, 'best_practices.md')
+  if (existsSync(qodoMd)) {
+    try {
+      results.push(importQodo(qodoMd))
+    } catch (e) {
+      errors.push({ file: qodoMd, error: String(e) })
+    }
+  }
+
   return { results, errors }
 }
 
@@ -348,6 +358,25 @@ export function importClaudeCode(filePath: string): ImportResult {
   
   return {
     format: 'claude',
+    filePath,
+    rules,
+    raw: content
+  }
+}
+
+export function importQodo(filePath: string): ImportResult {
+  const content = readFileSync(filePath, 'utf-8')
+  const rules: RuleBlock[] = [{
+    metadata: {
+      id: 'qodo-best-practices',
+      alwaysApply: true,
+      description: 'Qodo best practices and guidelines'
+    },
+    content: content.trim()
+  }]
+
+  return {
+    format: 'qodo',
     filePath,
     rules,
     raw: content

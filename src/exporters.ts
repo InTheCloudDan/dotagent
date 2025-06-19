@@ -208,6 +208,18 @@ export function exportToClaudeCode(rules: RuleBlock[], outputPath: string): void
   writeFileSync(outputPath, content, 'utf-8')
 }
 
+export function exportToQodo(rules: RuleBlock[], outputPath: string): void {
+  const content = rules
+    .map(rule => {
+      const header = rule.metadata.description ? `# ${rule.metadata.description}\n\n` : ''
+      return header + rule.content
+    })
+    .join('\n\n')
+
+  ensureDirectoryExists(outputPath)
+  writeFileSync(outputPath, content, 'utf-8')
+}
+
 export function exportAll(rules: RuleBlock[], repoPath: string, dryRun = false): void {
   // Export to all supported formats
   if (!dryRun) {
@@ -220,6 +232,7 @@ export function exportAll(rules: RuleBlock[], repoPath: string, dryRun = false):
     exportToCodex(rules, join(repoPath, 'AGENTS.md'))
     exportToAider(rules, join(repoPath, 'CONVENTIONS.md'))
     exportToClaudeCode(rules, join(repoPath, 'CLAUDE.md'))
+    exportToQodo(rules, join(repoPath, 'best_practices.md'))
   }
 }
 

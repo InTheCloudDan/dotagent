@@ -123,6 +123,7 @@ describe('agentconfig integration – import ▶ convert ▶ export ▶ re‑imp
     expect(formats).toContain('windsurf');
     expect(formats).toContain('zed');
     expect(formats).toContain('codex');
+    expect(formats).toContain('qodo');
   });
 
   it('handles multiple rule types correctly', async () => {
